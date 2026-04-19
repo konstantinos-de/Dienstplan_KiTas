@@ -1,11 +1,14 @@
 # Dienstplan
 
-Digitaler Dienstplan -- Dieser Dienstplan ist eine lokale Anwendung, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft. <br>
-DU benötigst keine spezielle Software, keine Installation und keine Internetverbindung.<br>
-Alle eingegebenen Daten bleiben ausschließlich auf Deinem eigenen Computer.
+Digitaler Dienstplan -- Dieser Dienstplan ist eine lokale Anwendung, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
+DU benötigst keine spezielle Software, **keine Installation** und **keine Internetverbindung**.<br>
+Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 
 ## Starten
-Öffne die HTML-Datei mit einem einfachen Doppelklick.
+
+1. Speichere die Datei „Dienstplan” in einem Ordner.
+2. Öffne die HTML-Datei mit einem einfachen Doppelklick.
+3. Dein Logo: Speichere im selben Ordner Dein KiTa-Logo als .png: So wird es oben rechts erscheinen.
 
 ## Personal eintragen
 Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.
@@ -37,6 +40,6 @@ Ein Klick auf „Ausdrucken“ genügt. Der Plan blendet automatisch alle unnöt
 Alle Symbole in der Datei dienen nicht der Dekoration, sondern sind funktionale Buttons.<br>
 ### Viel Spaß beim Spielen!
 
-**Hat es Dir gefallen?**<br>
+Hat es Dir gefallen?<br>
 **Gerne buy me a coffee:**<br>
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/konstantinos.de)
