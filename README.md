@@ -7,8 +7,8 @@ Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 ## Starten
 
 1. Speichere die Datei „Dienstplan” in einem Ordner.
-2. Öffne die HTML-Datei mit einem einfachen Doppelklick.
-3. Dein Logo: Speichere im selben Ordner Dein KiTa-Logo als .png: So wird es oben rechts erscheinen.
+2. Dein Logo: Speichere im selben Ordner Dein KiTa-Logo als .png: So wird es oben rechts erscheinen.
+3. Öffne die HTML-Datei mit einem einfachen Doppelklick.
 
 ## Personal eintragen
 Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.
