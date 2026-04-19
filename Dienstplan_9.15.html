@@ -1,0 +1,2733 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dienstplan 📅</title>
+    <link rel="icon" type="image/x-icon" href="logo_icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Asana+Math&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ca1f1f;
+            --primary-light: #f73737;
+            --accent: #ef5350;
+            --accent-bright: #ff6659;
+            --bg-main: #edefef;
+            --bg-card: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border: #dee2e6;
+            --warning: #ff9800;
+            --danger: #ef5350;
+            --success: #66bb6a;
+            --time-0715: #c8e6c9;
+            --time-1630: #b3e5fc;
+            --time-1700: #fff59d;
+            --time-0745: #80deea;
+            --gruppe1: #ffe0b2;
+            --gruppe2: #c8e6c9;
+            --gruppe3: #e1bee7;
+            --gruppe4: #b3e5fc;
+            --gruppe5: #a5d6a7;
+            --hilfspersonal: #fff9c4;
+            --leitung: #f8cfe6;
+            --na-grey: #e0e0e0;
+            --conflict-bg: #4d1f1f;
+            --conflict-border: #ed6b6f;
+        }
+
+
+        .license-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            font-weight: inherit;
+        }
+
+        .license-link:hover {
+            color: var(--primary);
+        }
+
+        .konstantinos-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            font-weight: inherit;
+        }
+
+        .konstantinos-link:hover {
+            color: var(--primary);
+        }
+
+        .license-link-btn {
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 0;
+            font: inherit;
+        }
+
+        /* Style the popover box */
+        #license-popover {
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 350px;
+            font-size: 14px;
+            line-height: 1.5;
+            background-color: white;
+        }
+
+        .free-use {
+            background-color: #dbffdc;
+            border-left: 4px solid #08c133;
+            padding: 10px;
+            color: #000000;
+        }
+
+        /* Add a red highlight to the commercial section */
+        .commercial-warning {
+            background-color: #fff5f5;
+            border-left: 4px solid #e53e3e;
+            padding: 10px;
+            color: #c53030;
+        }
+
+        #license-popover strong {
+            color: #1a202c;
+        }
+
+        #license-popover p {
+            margin: 10px 0;
+        }
+
+
+
+        .help-tooltip {    /* HOVER INSTRUCTION SYSTEM */
+            position: absolute;
+            background: #616161;
+            color: #ffffff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            pointer-events: none; /* Prevents the tooltip from blocking clicks */
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            max-width: 250px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .help-tooltip.visible {
+            opacity: 1;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: linear-gradient(135deg, #ffebee 0%, #fce4ec 50%, #ffffff 100%);
+            background-image: url('BACKGROUND_IMAGE_PATH_HERE');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 98%;
+            width: 98%;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--white) 100%);
+            padding: 2rem 2.5rem;
+            border-radius: 16px;
+            border: 3px solid var(--primary-light);
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(26, 77, 46, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        header h1 {
+            color: var(--primary-light);
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .einrichtung-box {
+            position: relative;
+            z-index: 1;
+            margin-top: -5px;
+        }
+
+        .einrichtung-box input {
+            height: 55px;
+            min-width: 150px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid var(--accent-bright);
+            padding: 2px 0;
+            color: black !important;
+            font-size: 2rem !important;
+            font-style: italic;
+            font-family: 'Georgia', cursive !important;
+        }
+
+        .week-info {
+            color: var(--accent-bright);
+            font-size: 1.1rem;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 3px;
+            color: black;
+        }
+
+        .week-selector {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .week-selector input {
+            background: rgba(255,255,255,0.95);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Asana Math', serif;
+            font-size: 1rem;
+            max-width: 200px;
+            font-weight: 600;
+        }
+
+        .week-selector input::placeholder {
+            color: rgba(0,0,0,0.5);
+        }
+
+        .aktuelles-box {
+            width: 100%;
+            margin-bottom: 1rem;
+            margin: 0;
+            padding: 8px;
+        }
+
+        #currentNotes:empty:before {
+            content: attr(placeholder);
+            color: #e7150e !important;
+            pointer-events: none;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 12px rgba(26, 77, 46, 0.2);
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(26, 77, 46, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-bright);
+        }
+
+        .table-container {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            color: white;
+            font-weight: 600;
+            padding: 1rem 0.75rem;
+            text-align: left;
+            border-bottom: 2px solid var(--accent);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: var(--bg-card) !important;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: var(--bg-main) !important;
+        }
+
+        tbody tr:hover {
+            background-color: #d5d6d8 !important;
+            transition: background-color 0.1s ease;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background-color: rgba(82, 183, 136, 0.08);
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            padding-right: 2rem;
+        }
+
+        header {
+            position: relative;
+        }
+
+        .header-logo {
+            position: absolute;
+            right: 8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            max-height: 120px !important;
+            z-index: 5;
+        }
+
+        .header-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            width: fit-content;
+        }
+
+        .einrichtung-box input {
+            min-width: 200px;
+            max-width: 400px;
+        }
+
+        .time-cell {
+            width: 100px !important;
+            font-size: 0.8rem;
+            padding: 0.4rem;
+        }
+
+        .total-cell {
+            font-weight: 700;
+            color: var(--primary);
+            background-color: rgba(82, 183, 136, 0.1) !important;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .spinner {
+            border: 3px solid rgba(82, 183, 136, 0.3);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+       .day-count {
+            background: rgba(26, 77, 46, 0.05);
+            padding: 0.2rem 0.2rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-top: 2px solid var(--border);
+        }
+
+        .count-item {
+            padding: 0.2rem 0.2rem;
+            border-radius: 6px;
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        .count-item.warning {
+            background: #ffebee;
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .neon-button {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .neon-button:hover {
+            background: rgba(183, 28, 28, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .neon-button .plus-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .neon-button:hover .plus-icon {
+            transform: rotate(90deg);
+        }
+
+        .neon-button:active {
+            transform: translateY(2px) scale(0.90);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(183, 28, 28, 0.2);
+        }
+
+        .dienste-select, .funktion-select, .stunden-soll-select, .gruppe-select {
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .dienste-select { width: 60px; color: var(--primary); font-weight: 700; }
+        .funktion-select { min-width: 100px; color: var(--primary); }
+        .stunden-soll-select { min-width: 100px; }
+        .gruppe-select { min-width: 120px; }
+
+        .name-input {
+            min-width: 150px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .gruppe-gruppe1 { background-color: var(--gruppe1) !important; }
+        .gruppe-gruppe2 { background-color: var(--gruppe2) !important; }
+        .gruppe-gruppe3 { background-color: var(--gruppe3) !important; }
+        .gruppe-gruppe4 { background-color: var(--gruppe4) !important; }
+        .gruppe-gruppe5 { background-color: var(--gruppe5) !important; }
+        .gruppe-hilfspersonal { background-color: var(--hilfspersonal) !important; }
+        .gruppe-leitung { background-color: var(--leitung) !important; }
+        .dienste-na { background-color: var(--na-grey) !important; color: #757575; }
+
+        .kw-selector { margin-left: 1rem; }
+        .kw-selector select {
+            background: rgba(255,255,255,0.95);
+            border: 2px solid var(--accent-bright);
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Asana Math', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 150px;
+        }
+
+        .conflicts-section {
+            background: var(--conflict-bg);
+            border: 2px solid var(--conflict-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .conflicts-title {
+            color: var(--accent-bright);
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .conflict-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .conflict-checkbox {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .vorbereitung-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin: auto;
+        }
+
+        .vb-missing { outline: 3px solid var(--danger); outline-offset: 2px; }
+        .vb-planned { outline: 3px solid var(--success); outline-offset: 2px; }
+
+        .settings-gear {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            cursor: pointer;
+            font-size: 2rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        .settings-gear:hover {
+            transform: rotate(90deg);
+            color: var(--accent-bright);
+        }
+
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .settings-modal.show { display: flex; }
+
+        .settings-content {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 650px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-section { margin-bottom: 2rem; }
+        .settings-section h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .settings-input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        .settings-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .settings-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .copy-arrow {
+            display: inline-block;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            color: var(--accent);
+        }
+
+        .time-0715 { background-color: var(--time-0715) !important; }
+        .time-1630 { background-color: var(--time-1630) !important; }
+        .time-1700 { background-color: var(--time-1700) !important; }
+        .time-0745 { background-color: var(--time-0745) !important; }
+
+        .gear-icon {
+            display: inline-block;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .time-duration-menu {
+            position: absolute;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            padding: 0.5rem;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .time-duration-option {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .time-duration-option:hover {
+            background-color: var(--accent-bright);
+            color: white;
+        }
+
+        .day-cell { position: relative; }
+
+        .time-inputs-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #weekNotes {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: black;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Asana Math', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 250px;
+            height: 42px;
+            resize: both;
+            display: block;
+            line-height: 1.2;
+            transition: all 0.3s ease;
+        }
+
+        /* --- TIMELINE MARKER STYLES --- */
+        .timeline-marker {
+            position: absolute;
+            z-index: 5;
+            top: 0;
+            bottom: 0;
+            width: 14px;
+            cursor: col-resize;
+            transform: translateX(-7px);
+        }
+        .main-marker::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: black;
+        }
+        .sub-marker::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            border-left: 2px dashed rgba(0,0,0,0.4);
+        }
+        .timeline-marker:hover::after {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        @media print {
+            ::-webkit-scrollbar { display: none !important; }
+            .table-scroll, .table-container {
+                overflow: visible !important;
+                display: block !important;
+                width: 100% !important;
+            }
+            body, html {
+                overflow: visible !important;
+                height: auto !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            body { background: white !important; }
+
+            .controls, .neon-button, .nav-button, .notification, .footer,
+            .delete-btn, .gear-icon, .kw-selector, .conflicts-section,
+            .copy-arrow, .settings-gear, .week-info, #interactiveTimeline, .hide-print {
+                display: none !important;
+            }
+
+            table th:nth-child(12), table td:nth-child(12),
+            table th:nth-child(13), table td:nth-child(13),
+            table th:nth-child(6), table td:nth-child(6),
+            table th:nth-child(5), table td:nth-child(5),
+            table th:nth-child(4), table td:nth-child(4),
+            table th:nth-child(3), table td:nth-child(3),
+            table th:nth-child(2), table td:nth-child(2),
+            .day-count {
+                display: none !important;
+            }
+
+            .count-row-wrapper { display: none !important; }
+            .time-0715 { background-color: #c8e6c9 !important; }
+            .time-1630 { background-color: #b3e5fc !important; }
+            .time-1700 { background-color: #fff59d !important; }
+            .time-0745 { background-color: #80deea !important; }
+            .dienste-na { background-color: #e0e0e0 !important; }
+            td, th { border: 1px solid #ddd !important; }
+
+            input[data-print-value]::after { content: attr(data-print-value); }
+            input[data-print-value] { font-size: 0 !important; }
+
+            .einrichtung-box input {
+                height: 55px;
+                min-width: 150px;
+                background: transparent;
+                border: none;
+                border-bottom: 3px solid var(--accent-bright);
+                padding: 5px 0;
+                color: black !important;
+                font-size: 2rem !important;
+                font-style: italic;
+                font-family: 'Georgia', cursive !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <input type="hidden" id="projectDataStorage" value="">
+
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-content">
+            <div class="settings-title">⚙️ Einrichtungseinstellungen</div>
+
+            <div class="settings-section">
+                <h3>Dienste Zeiten</h3>
+                <label>f (Früh):</label>
+                <input type="time" class="settings-input" id="setting_f_time" value="07:15">
+
+                <label>m (Mittel):</label>
+                <input type="time" class="settings-input" id="setting_m_time" value="08:15">
+
+                <label>s (Spät - Ende):</label>
+                <input type="time" class="settings-input" id="setting_s_time" value="17:00">
+
+                <label>m (Hybrid):</label>
+                <input type="time" class="settings-input" id="setting_h_time" value="07:45">
+
+                <label>Standard VB-Dauer (Minuten):</label>
+                <input type="number" class="settings-input" id="setting_vb_duration" min="15" step="15" placeholder="120">
+            </div>
+
+            <div class="settings-section">
+                <h3>Gruppennamen & Farben</h3>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_gruppe1" style="margin: 0;" placeholder="Gruppe 1">
+                    <select class="settings-input" id="setting_color_gruppe1" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_gruppe2" style="margin: 0;" placeholder="Gruppe 2">
+                    <select class="settings-input" id="setting_color_gruppe2" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_gruppe3" style="margin: 0;" placeholder="Gruppe 3">
+                    <select class="settings-input" id="setting_color_gruppe3" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_gruppe4" style="margin: 0;" placeholder="Gruppe 4">
+                    <select class="settings-input" id="setting_color_gruppe4" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_gruppe5" style="margin: 0;" placeholder="Gruppe 5">
+                    <select class="settings-input" id="setting_color_gruppe5" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_hilfspersonal" style="margin: 0;" placeholder="Hilfspersonal">
+                    <select class="settings-input" id="setting_color_hilfspersonal" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <input type="text" class="settings-input" id="setting_leitung" style="margin: 0;" placeholder="Leitung">
+                    <select class="settings-input" id="setting_color_leitung" style="margin: 0; width: 130px; font-weight: bold; cursor: pointer;" onchange="this.style.backgroundColor = this.value">
+                        <option value="#ffcdd2" style="background: #ffcdd2;">Rot</option>
+                        <option value="#ffe0b2" style="background: #ffe0b2;">Orange</option>
+                        <option value="#fff9c4" style="background: #fff9c4;">Gelb</option>
+                        <option value="#c8e6c9" style="background: #c8e6c9;">Hellgrün</option>
+                        <option value="#a5d6a7" style="background: #a5d6a7;">Grün</option>
+                        <option value="#b3e5fc" style="background: #b3e5fc;">Blau</option>
+                        <option value="#e1bee7" style="background: #e1bee7;">Lila</option>
+                        <option value="#f8cfe6" style="background: #f8cfe6;">Rosa</option>
+                        <option value="#e0e0e0" style="background: #e0e0e0;">Grau</option>
+                        <option value="#ffffff" style="background: #ffffff;">Weiß</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3>Summen-Zeilen anzeigen</h3>
+                <label><input type="checkbox" id="setting_show_anwesend" checked> Anwesend (ohne Leitung & VB)</label><br>
+                <label><input type="checkbox" id="setting_show_frueh" checked> Früh-Summe (folgt Frühdienst-Zeit)</label><br>
+                <label><input type="checkbox" id="setting_show_16" checked> Check-Summe um: </label>
+                <input type="time" id="setting_check_time" style="width: 90px; padding: 2px; border: 1px solid var(--border); border-radius: 4px;"><br>
+                <label><input type="checkbox" id="setting_show_spaet" checked> Spät-Summe (folgt Spätdienst-Zeit)</label>
+            </div>
+
+            <div class="settings-buttons">
+                <button class="btn" onclick="closeSettings()">Abbrechen</button>
+                <button class="btn btn-secondary" onclick="saveSettings()">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="settings-gear" onclick="openSettings()" title="Die Einrichtungseinstellungen ändern">⚙️</div>
+            <img src="logo_icon.png" alt="Logo" class="header-logo">
+            <div class="header-content">
+                <div class="header-title-group">
+                    <h1>Dienstplan</h1>
+                    <div class="einrichtung-box">
+                        <input type="text" id="einrichtungInput" placeholder="Name der Einrichtung">
+                    </div>
+                    <div class="week-info">
+                        <span>Kalenderwoche:</span>
+                        <div class="week-selector">
+                            <input type="text" id="weekInput" placeholder="z.B. KW 08.2026">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <button class="btn" onclick="addEmployee()">➕ Mitarbeiter hinzufügen</button>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <div class="kw-selector">
+                    <label style="color: var(--accent-bright); font-size: 0.9rem; margin-right: 0.5rem;">Zeig KW:</label>
+                    <select id="kwSelect"></select>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;" data-hover-instructions="Die Woche als .json exportieren. --- Diese Datei kannst Du dann in neues .html importieren, anstatt immer die alle vergagenen Wochen laden zu müssen." onclick="exportSingleWeek()">Woche Exportieren</button>
+                    <button class="btn btn-secondary" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;" data-hover-instructions="Eine bereits erstellte .json Datei importieren. --- Dann wird die aktuelle Woche durch die Daten der .json ersetzt."  onclick="triggerImport()">Woche Importieren</button>
+                    <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importSingleWeek(event)">
+                </div>
+                <button class="neon-button" onclick="addNewWeek()" title="Neue Woche Addieren">
+                    <span class="plus-icon">+</span>
+                    <span>Neue Woche Addieren</span>
+                </button>
+                <button class="btn btn-secondary" data-hover-instructions="Das ganze .html speichern, ggf. mit allen Wochen." onclick="saveAsHTML()">💾 Speichern</button>
+                <button class="btn btn-secondary" data-hover-instructions="Nur die aktuelle Woche als .html speichern." onclick="saveThisWeek()">💾⬇ Diese Woche speichern</button>
+                <button class="btn btn-secondary" onclick="printSchedule()">🖨️ Ausdrucken</button>
+            </div>
+        </div>
+
+        <div id="loadingContainer" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <span>Lade Dienstplan...</span>
+        </div>
+
+        <div id="conflictsSection" class="conflicts-section" style="display: none;">
+            <div class="conflicts-title">⚠️ Konflikte</div>
+            <div id="conflictsList"></div>
+        </div>
+
+        <div class="table-container">
+            <div class="table-scroll">
+                <table id="scheduleTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Name</th>
+                            <th style="width: 110px;">Funktion</th>
+                            <th style="width: 120px;">Gruppe</th>
+                            <th style="width: 100px;" data-hover-instructions="Wöchentliche vertragliche Arbeitszeit">Stunden Soll</th>
+                            <th style="width: 60px;">Dienste</th>
+                            <th style="width: 60px;" data-hover-instructions= "Berechtigung für Vorbereitungszeit (aktivieren, falls zutreffend). Eingabeformat: 'HH:MM VB'. Für Vorbereitungszeit 'VB' (nutzt Standard-Dauer) oder 'VB' + Minuten anfügen. Beispiele: '07:15 VB' (Beginn) oder '16:00 VB45' (45 Min. am Ende).">VB</th>
+                            <th style="width: 140px;">Montag</th>
+                            <th style="width: 140px;">Dienstag</th>
+                            <th style="width: 140px;">Mittwoch</th>
+                            <th style="width: 140px;">Donnerstag</th>
+                            <th style="width: 140px;">Freitag</th>
+                            <th style="width: 100px;">Summe Stunden</th>
+                            <th style="width: 80px;">MA-entfernen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="aktuellesWrapper">
+            <h2 style="font-family: 'Times New Roman', serif; font-style: italic; font-size: 1.8rem; color: var(--primary); margin: 0;">Aktuelles</h2>
+            <div class="aktuelles-box" style="margin: 0;">
+                <div id="currentNotes" contenteditable="true" style="min-height: 100px; border: 0px solid #ccc; border-radius: 4px; padding: 8px; outline: none; white-space: pre-wrap;"></div>
+            </div>
+        </div>
+
+
+        <div class="footer">
+            Dienstplan-System • Lokale Speicherung<br>
+            <span class="sub-footer">Crafted with ❤️ by </span>
+
+            <a href="mailto:konstantinos.dedousis@etik.com" class="konstantinos-link" data-hover-instructions="Eine DanksagungsMail oder Feedback an Konstantinos senden, er wird sich freuen!">Konstantinos</a>  -
+
+            <button class="license-link-btn" popovertarget="license-popover">License</button>
+
+            <div id="license-popover" popover>
+                <p>This piece of work is released under the <strong>Prosperity Public License 3.0.0</strong>.</p>
+                <p>This is a <strong>Non-Commercial</strong> and <strong>Source-Available</strong> License that defines:</p>
+
+                <p class="free-use"><u><strong>Kostenfrei für:</strong></u><br>
+                <strong>Private Nutzung</strong> zu Forschungs-, Versuchs- und Testzwecken im Interesse des öffentlichen Wissens, zum persönlichen Studium, zur privaten Unterhaltung, für Hobbyprojekte, zur Ausübung von Freizeitaktivitäten oder zur Ausübung religiöser Riten, als auch die Nutzung durch gemeinnützige Organisationen, <strong>Bildungseinrichtungen (wie KiTas)</strong>, öffentliche Forschungseinrichtungen sowie Organisationen im Bereich der öffentlichen Sicherheit oder des Gesundheitswesens, vorausgesetzt, dass eine kommerzielle Nutzung nicht beabsichtigt ist.</p>
+
+                <p class="commercial-warning"><strong>Gewerbliche Nutzung:</strong><br>
+                Nur für einen Testzeitraum von <strong>30 Tagen</strong> gestattet. Danach ist eine kommerzielle Lizenz erforderlich.</p>
+
+                <hr>
+                <a href="https://github.com/Konstantinos-1234/Dienstplan/blob/main/LICENSE.md" target="_blank">Vollständige Lizenz auf GitHub lesen</a>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // ==========================================
+        // 1. GLOBAL CONSTANTS AND DOM ELEMENTS
+        // ==========================================
+        const PLACEHOLDER_TEXT = 'Aktuelles für diese Woche...';
+        const currentNotes = document.getElementById('currentNotes');
+        const aktuellesWrapper = document.getElementById('aktuellesWrapper');
+
+        const timeOptions = [
+            '0 - n.a.',
+            '07:15',
+            '07:30',
+            '07:45',
+            '08:00',
+            '08:15',
+            '08:30',
+            '08:45',
+            '09:00',
+            '09:15',
+            '09:30',
+            '09:45',
+            '10:00',
+            '10:30',
+            '11:00',
+            '11:15',
+            '11:30',
+            '12:00',
+            '12:30',
+            '13:00',
+            '13:30',
+            '14:00',
+            '14:30',
+            '15:00',
+            '15:30',
+            '16:00',
+            '16:30',
+        ];
+
+
+        const diensteOptions = ['0 - n.a.', 'f', 'm', 's', '0', 'h'];
+        const funktionOptions = ['FK', 'EK', 'PiA 1. Jahr', 'PiA 2. Jahr', 'PiA 3. Jahr', 'Andere'];
+        const gruppeOptions = ['Gruppe 1', 'Gruppe 2', 'Gruppe 3', 'Gruppe 4', 'Gruppe 5', 'Hilfspersonal', 'Leitung'];
+
+        const stundenSollOptions = [];
+        for (let hours = 1; hours <= 39; hours++) {
+            stundenSollOptions.push(`${hours}:00`);
+            if (hours < 39) stundenSollOptions.push(`${hours}:30`);
+        }
+
+        const DEFAULT_WORK_MINUTES = 465;
+
+        // ==========================================
+        // 2. STATE VARIABLES
+        // ==========================================
+        let employees = [];
+        let einrichtungsname = '';
+        let allWeeks = {};
+        let currentGearMenu = null;
+        let conflicts = [];
+        let ignoredConflicts = new Set();
+
+        let settings = {
+            f_time: '07:15', m_time: '08:15', s_time: '17:00', h_time: '07:45', check_time: '16:00',
+            vb_duration: 120,
+            gruppe1: 'Gruppe 1', gruppe2: 'Gruppe 2', gruppe3: 'Gruppe 3', gruppe4: 'Gruppe 4',
+            gruppe5: 'Gruppe 5', hilfspersonal: 'Hilfspersonal', leitung: 'Leitung',
+            color_gruppe1: '#ffe0b2', color_gruppe2: '#c8e6c9', color_gruppe3: '#e1bee7',
+            color_gruppe4: '#b3e5fc', color_gruppe5: '#a5d6a7', color_hilfspersonal: '#fff9c4',
+            color_leitung: '#f8cfe6', show_anwesend: true, show_frueh: true, show_16: true, show_spaet: true,
+            marker_start: 435, marker_end: 1020, marker_mid1: 930, marker_mid2: 990
+        };
+
+        // ==========================================
+        // 3. AKTUELLES LOGIC
+        // ==========================================
+        function updateAktuellesVisibility() {
+            if (!aktuellesWrapper || !currentNotes) return;
+            const content = currentNotes.textContent.trim();
+            const isEmpty = content === '' || content === PLACEHOLDER_TEXT;
+
+            if (isEmpty) {
+                aktuellesWrapper.classList.add('hide-print');
+            } else {
+                aktuellesWrapper.classList.remove('hide-print');
+            }
+        }
+
+        currentNotes.addEventListener('focus', function() {
+            if (this.textContent.trim() === PLACEHOLDER_TEXT) {
+                this.textContent = '';
+                this.style.color = 'inherit';
+            }
+        });
+
+        currentNotes.addEventListener('blur', function() {
+            if (this.textContent.trim() === '') {
+                this.textContent = PLACEHOLDER_TEXT;
+                this.style.color = '#c5c5c5';
+            }
+            updateAktuellesVisibility();
+        });
+
+        currentNotes.addEventListener('input', updateAktuellesVisibility);
+
+        // ==========================================
+        // 4. CORE FUNCTIONS
+        // ==========================================
+
+        function parseWeekNumber(weekStr) {
+            if (!weekStr) return { week: 1, year: new Date().getFullYear() };
+            // Looks for KW 08.2026
+            let match = weekStr.match(/KW\s*(\d+)\.(\d{4})/i);
+            if (match) return { week: parseInt(match[1]), year: parseInt(match[2]) };
+
+            // Looks for just KW 08 (Defaults to current year)
+            match = weekStr.match(/KW\s*(\d+)/i);
+            if (match) return { week: parseInt(match[1]), year: new Date().getFullYear() };
+
+            // Looks for any raw number
+            match = weekStr.match(/(\d+)/);
+            if (match) return { week: parseInt(match[1]), year: new Date().getFullYear() };
+
+            return { week: 1, year: new Date().getFullYear() };
+        }
+
+        function formatWeekNumber(week, year) {
+            return `KW ${String(week).padStart(2, '0')}.${year}`;
+        }
+
+        function rotateDienste(dienste) {
+            if (dienste === 'f') return 'm';
+            if (dienste === 'm') return 's';
+            if (dienste === 's') return 'f';
+            return dienste;
+        }
+
+        function getDailyWorkMinutes(stundenSoll) {
+            if (!stundenSoll || stundenSoll === '—' || stundenSoll === '') return DEFAULT_WORK_MINUTES;
+            const parts = stundenSoll.split(':');
+            if (parts.length === 2) {
+                const totalWeeklyMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+                return totalWeeklyMinutes / 5;
+            }
+            return DEFAULT_WORK_MINUTES;
+        }
+
+        function getNextWeekString() {
+            const target = new Date();
+            target.setDate(target.getDate() + 7);
+            const dayNr = (target.getDay() + 6) % 7;
+            target.setDate(target.getDate() - dayNr + 3);
+            const firstThursday = target.valueOf();
+            target.setMonth(0, 1);
+            if (target.getDay() !== 4) {
+                target.setMonth(0, 1 + ((4 - target.getDay()) + 7) % 7);
+            }
+            const weekNum = 1 + Math.ceil((firstThursday - target) / 604800000);
+            return formatWeekNumber(weekNum, target.getFullYear());
+        }
+
+        let currentWeek = getNextWeekString();
+
+        function applyGroupColors() {
+            document.documentElement.style.setProperty('--gruppe1', settings.color_gruppe1);
+            document.documentElement.style.setProperty('--gruppe2', settings.color_gruppe2);
+            document.documentElement.style.setProperty('--gruppe3', settings.color_gruppe3);
+            document.documentElement.style.setProperty('--gruppe4', settings.color_gruppe4);
+            document.documentElement.style.setProperty('--gruppe5', settings.color_gruppe5);
+            document.documentElement.style.setProperty('--hilfspersonal', settings.color_hilfspersonal);
+            document.documentElement.style.setProperty('--leitung', settings.color_leitung);
+        }
+
+        function getWeekDateRange(weekStr) {
+            const parsed = parseWeekNumber(weekStr);
+            if (!parsed) return "";
+            const simple = new Date(parsed.year, 0, 1 + (parsed.week - 1) * 7);
+            const dayOfWeek = simple.getDay();
+            const ISOweekStart = simple;
+
+            if (dayOfWeek <= 4) ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
+            else ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
+
+            const monday = new Date(ISOweekStart);
+            const friday = new Date(ISOweekStart);
+            friday.setDate(monday.getDate() + 4);
+
+            const f = (d) => String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.';
+            return `${f(monday)} - ${f(friday)}`;
+        }
+
+        function parseTime(timeStr) {
+            if (!timeStr || timeStr === '0 - n.a.') return null;
+            if (timeStr.includes('VB')) {
+                const match = timeStr.match(/(\d{2}):(\d{2})/);
+                if (match) return parseInt(match[1]) * 60 + parseInt(match[2]);
+            }
+            const parts = timeStr.split(':');
+            if (parts.length >= 2) return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+            return null;
+        }
+
+        function formatTime(minutes) {
+            if (minutes === null) return '0 - n.a.';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+        }
+
+        function formatStartTimeForPrint(startTime) {
+            if (!startTime) return '';
+            if (startTime.includes('with VB am Ende')) {
+                const match = startTime.match(/(\d{2}:\d{2})/);
+                return match ? match[1] : startTime;
+            }
+            return startTime;
+        }
+
+        function calculateEndTime(startTime, durationMinutes = null, stundenSoll = '') {
+            if (!startTime || startTime === '0 - n.a.') return '0 - n.a.';
+
+            if (startTime.includes('mit VB am Ende')) {
+                const match = startTime.match(/(\d{2}):(\d{2})/);
+                if (match) {
+                    const startMinutes = parseInt(match[1]) * 60 + parseInt(match[2]);
+                    const endMinutes = startMinutes + 345 + 30;
+                    return 'VB ' + formatTime(endMinutes).substring(0, 5);
+                }
+            }
+
+            const startMinutes = parseTime(startTime);
+            if (startMinutes === null) return '0 - n.a.';
+
+            let workDuration = durationMinutes;
+            if (workDuration === null) workDuration = getDailyWorkMinutes(stundenSoll);
+
+            const breakMinutes = workDuration > 360 ? 30 : 0;
+            return formatTime(startMinutes + workDuration + breakMinutes);
+        }
+
+        function createTimeInput(value, onChangeCallback, isStartTime = true) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'time-cell';
+            input.value = value || '0 - n.a.';
+            input.placeholder = 'HH:MM';
+
+            // Open the custom menu when the user clicks the cell
+            input.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showCustomTimeMenu(e, input, onChangeCallback);
+            });
+
+            input.addEventListener('change', onChangeCallback);
+            input.addEventListener('blur', onChangeCallback);
+
+            if (isStartTime && value && value.includes('with VB am Ende')) {
+                input.setAttribute('data-print-value', formatStartTimeForPrint(value));
+            }
+
+            return input;
+        }
+
+
+        let currentTimeMenu = null;
+
+        function showCustomTimeMenu(event, inputElement, onChangeCallback) {
+            // Close any existing menu to prevent duplicates
+            if (currentTimeMenu) {
+                currentTimeMenu.remove();
+                currentTimeMenu = null;
+            }
+
+            const menu = document.createElement('div');
+            menu.className = 'time-duration-menu'; // Reuses your existing gear menu CSS
+
+            // Position the menu directly beneath the mouse click
+            menu.style.position = 'fixed';
+            menu.style.left = event.clientX + 'px';
+            menu.style.top = (event.clientY + 15) + 'px';
+            menu.style.maxHeight = '250px';
+            menu.style.overflowY = 'auto';
+            menu.style.zIndex = '1000';
+
+            timeOptions.forEach(option => {
+                const item = document.createElement('div');
+                item.className = 'time-duration-option';
+                item.textContent = option;
+
+                // Use mousedown instead of click so it registers before the input loses focus (blur)
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    inputElement.value = option;
+                    onChangeCallback();
+                    menu.remove();
+                    currentTimeMenu = null;
+                });
+                menu.appendChild(item);
+            });
+
+            document.body.appendChild(menu);
+            currentTimeMenu = menu;
+
+            // Global listener to close the menu if the user clicks anywhere else on the screen
+            document.addEventListener('mousedown', function closeMenu(e) {
+                if (currentTimeMenu && !currentTimeMenu.contains(e.target) && e.target !== inputElement) {
+                    currentTimeMenu.remove();
+                    currentTimeMenu = null;
+                    document.removeEventListener('mousedown', closeMenu);
+                }
+            }, { once: true });
+        }
+
+        function calculateDayHours(start, end) {
+            if (start && start.includes('with VB am Ende')) return 8.0;
+            const startMinutes = parseTime(start);
+            const endMinutes = parseTime(end);
+
+            if (startMinutes === null || endMinutes === null) return 0;
+            let duration = endMinutes - startMinutes;
+            if (duration > 360) duration -= 30;
+            return duration / 60;
+        }
+
+        function calculateTotalHours(rowData) {
+            let total = 0;
+            for (let i = 0; i < 5; i++) {
+                total += calculateDayHours(rowData[`day${i}_start`], rowData[`day${i}_end`]);
+            }
+            return total.toFixed(2);
+        }
+
+        function countShifts() {
+            const counts = {
+                monday: { frueh: 0, at16: 0, spaet: 0 }, tuesday: { frueh: 0, at16: 0, spaet: 0 },
+                wednesday: { frueh: 0, at16: 0, spaet: 0 }, thursday: { frueh: 0, at16: 0, spaet: 0 },
+                friday: { frueh: 0, at16: 0, spaet: 0 }
+            };
+            const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+            const fruehTarget = parseTime(settings.f_time);
+            const checkTarget = parseTime(settings.check_time || '16:00');
+            const spaetThreshold = parseTime(settings.s_time);
+
+            employees.forEach(emp => {
+                for (let day = 0; day < 5; day++) {
+                    const startStr = emp[`day${day}_start`] || '0';
+                    const endStr = emp[`day${day}_end`] || '0';
+                    const start = startStr.trim();
+                    const end = endStr.trim();
+
+                    if (start === '0 - n.a.' || emp.dienste === '0 - n.a.' || start === '0') continue;
+                    const startMinutes = parseTime(start);
+                    const endMinutes = parseTime(end);
+
+                    if (startMinutes !== null && endMinutes !== null) {
+                        if (startMinutes === fruehTarget) counts[dayNames[day]].frueh++;
+                        if (startMinutes <= checkTarget && endMinutes >= checkTarget) counts[dayNames[day]].at16++;
+                        if (endMinutes >= spaetThreshold) counts[dayNames[day]].spaet++;
+                    }
+                }
+            });
+            return counts;
+        }
+
+        function hasVBInSchedule(emp) {
+            for (let day = 0; day < 5; day++) {
+                const start = emp[`day${day}_start`] || '';
+                const end = emp[`day${day}_end`] || '';
+
+                // Evaluates both start and end strings for the presence of "VB" (case-insensitive)
+                if (start.toUpperCase().includes('VB') || end.toUpperCase().includes('VB')) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        function highlightVBCells() {
+            // Target all time input fields
+            const cells = document.querySelectorAll('.time-cell');
+            cells.forEach(cell => {
+                // Get the value from input field
+                const content = cell.value || cell.textContent || '';
+                if (content && content.toUpperCase().includes('VB')) {
+                    // Apply yellow outline
+                    cell.style.outline = '3px solid #FFD700';
+                    cell.style.outlineOffset = '2px';
+                } else {
+                    // Reset the styling if VB is removed
+                    cell.style.outline = '';
+                    cell.style.outlineOffset = '';
+                }
+            });
+        }
+
+
+
+        function renderConflicts() {
+            conflicts = [];
+            const section = document.getElementById('conflictsSection');
+            section.style.display = 'none';
+        }
+
+        // ==========================================
+        // 5. DOM CREATION HELPERS
+        // ==========================================
+        function createCopyArrow(empIndex, dayIndex) {
+            if (dayIndex >= 4) return null;
+
+            const arrow = document.createElement('span');
+            arrow.className = 'copy-arrow';
+            arrow.innerHTML = '→';
+            arrow.title = 'In nächsten Tag kopieren';
+
+            arrow.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const emp = employees[empIndex];
+                emp[`day${dayIndex + 1}_start`] = emp[`day${dayIndex}_start`];
+                emp[`day${dayIndex + 1}_duration`] = emp[`day${dayIndex}_duration`];
+                emp[`day${dayIndex + 1}_end`] = calculateEndTime(emp[`day${dayIndex + 1}_start`], emp[`day${dayIndex + 1}_duration`], emp.stundenSoll);
+                renderSchedule();
+                showNotification('In nächsten Tag kopiert');
+            });
+
+            return arrow;
+        }
+
+        function createVBCheckbox(value, index) {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'vorbereitung-checkbox';
+            checkbox.checked = value || false;
+            const emp = employees[index];
+
+            if (emp.vbEligible) {
+                if (hasVBInSchedule(emp)) checkbox.classList.add('vb-planned');
+                else checkbox.classList.add('vb-missing');
+            }
+
+            checkbox.addEventListener('change', () => {
+                employees[index].vbEligible = checkbox.checked;
+                renderSchedule();
+            });
+
+            return checkbox;
+        }
+
+        function createTimeSelect(value, onChangeCallback) {
+            return createTimeInput(value, onChangeCallback, true);
+        }
+
+        function createFunktionSelect(value, index) {
+            const select = document.createElement('select');
+            select.className = 'funktion-select';
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = ''; defaultOpt.textContent = '—';
+            select.appendChild(defaultOpt);
+
+            funktionOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option; opt.textContent = option;
+                if (option === value) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.addEventListener('change', () => {
+                employees[index].funktion = select.value;
+                renderSchedule();
+            });
+
+            return select;
+        }
+
+        function createDiensteSelect(value, index) {
+            const select = document.createElement('select');
+            select.className = 'dienste-select';
+
+            diensteOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option; opt.textContent = option;
+                if (option === value) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.addEventListener('change', () => {
+                employees[index].dienste = select.value;
+                if (confirm('Sollen die Dienste auf Grundlage der Angaben angepasst werden?')) {
+                    applyDiensteToSchedule(index, select.value);
+                }
+                renderSchedule();
+            });
+
+            return select;
+        }
+
+        function createStundenSollSelect(value, index) {
+            const select = document.createElement('select');
+            select.className = 'stunden-soll-select';
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = ''; defaultOpt.textContent = '—';
+            select.appendChild(defaultOpt);
+
+            stundenSollOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option; opt.textContent = option;
+                if (option === value) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.addEventListener('change', () => {
+                employees[index].stundenSoll = select.value;
+                for (let day = 0; day < 5; day++) {
+                    const start = employees[index][`day${day}_start`];
+                    if (start && start !== '0 - n.a.' && start !== '0') {
+                        employees[index][`day${day}_end`] = calculateEndTime(start, employees[index][`day${day}_duration`], select.value);
+                    }
+                }
+                renderSchedule();
+            });
+
+            return select;
+        }
+
+        function createGruppeSelect(value, index) {
+            const select = document.createElement('select');
+            select.className = 'gruppe-select';
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = ''; defaultOpt.textContent = '—';
+            select.appendChild(defaultOpt);
+
+            gruppeOptions.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option; opt.textContent = option;
+                if (option === value) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            select.addEventListener('change', () => {
+                employees[index].gruppe = select.value;
+                sortEmployeesByGruppe();
+                renderSchedule();
+            });
+
+            return select;
+        }
+
+        function applyDiensteToSchedule(empIndex, dienste) {
+            let startTime = '0 - n.a.';
+            const stundenSoll = employees[empIndex].stundenSoll;
+            const workMins = getDailyWorkMinutes(stundenSoll);
+            const totalDuration = workMins + (workMins > 360 ? 30 : 0);
+
+            switch (dienste) {
+                case 'f': startTime = settings.f_time; break;
+                case 'm': startTime = settings.m_time; break;
+                case 'h': startTime = settings.h_time; break;
+                case 's':
+                    const endMins = parseTime(settings.s_time);
+                    if (endMins !== null) startTime = formatTime(endMins - totalDuration);
+                    break;
+                case '0 - n.a.':
+                    for (let day = 0; day < 5; day++) {
+                        employees[empIndex][`day${day}_start`] = '0 - n.a.';
+                        employees[empIndex][`day${day}_end`] = '0 - n.a.';
+                    }
+                    return;
+                default: return;
+            }
+
+            for (let day = 0; day < 5; day++) {
+                employees[empIndex][`day${day}_start`] = startTime;
+                employees[empIndex][`day${day}_end`] = calculateEndTime(startTime, employees[empIndex][`day${day}_duration`], stundenSoll);
+            }
+        }
+
+        function sortEmployeesByGruppe() {
+            const currentOrder = {
+                [settings.hilfspersonal]: 1, [settings.gruppe1]: 2, [settings.gruppe2]: 3,
+                [settings.gruppe3]: 4, [settings.gruppe4]: 5, [settings.gruppe5]: 6, [settings.leitung]: 7
+            };
+            employees.sort((a, b) => (currentOrder[a.gruppe] || 99) - (currentOrder[b.gruppe] || 99));
+        }
+
+        function getGruppeColorClass(gruppe) {
+            if (!gruppe) return '';
+            if (gruppe === settings.gruppe1) return 'gruppe-gruppe1';
+            if (gruppe === settings.gruppe2) return 'gruppe-gruppe2';
+            if (gruppe === settings.gruppe3) return 'gruppe-gruppe3';
+            if (gruppe === settings.gruppe4) return 'gruppe-gruppe4';
+            if (gruppe === settings.gruppe5) return 'gruppe-gruppe5';
+            if (gruppe === settings.hilfspersonal) return 'gruppe-hilfspersonal';
+            if (gruppe === settings.leitung) return 'gruppe-leitung';
+            return '';
+        }
+
+        function getTimeColorClass(timeStr) {
+            if (!timeStr || timeStr === '0 - n.a.') return '';
+            if (timeStr.startsWith(settings.f_time)) return 'time-0715';
+            if (timeStr.startsWith(settings.m_time)) return 'time-0745';
+            if (timeStr.startsWith(settings.s_time)) return 'time-1700';
+            if (timeStr.startsWith(settings.h_time)) return 'time-1630';
+            return '';
+        }
+
+        function createGearIcon(empIndex, dayIndex) {
+            const gear = document.createElement('span');
+            gear.className = 'gear-icon';
+            gear.innerHTML = '⚙️';
+            gear.title = 'Soll-Zeit anpassen';
+            gear.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showDurationMenu(e, empIndex, dayIndex);
+            });
+            return gear;
+        }
+
+        function showDurationMenu(event, empIndex, dayIndex) {
+            if (currentGearMenu) {
+                currentGearMenu.remove();
+                currentGearMenu = null;
+            }
+
+            const menu = document.createElement('div');
+            menu.className = 'time-duration-menu';
+
+            for (let hours = 1; hours <= 9; hours++) {
+                for (let mins = 0; mins < 60; mins += 15) {
+                    if (hours === 9 && mins > 0) break;
+                    const totalMinutes = hours * 60 + mins;
+                    const displayTime = `${hours}:${String(mins).padStart(2, '0')}`;
+                    const option = document.createElement('div');
+                    option.className = 'time-duration-option';
+                    option.textContent = displayTime;
+
+                    option.addEventListener('click', () => {
+                        employees[empIndex][`day${dayIndex}_duration`] = totalMinutes;
+                        const startTime = employees[empIndex][`day${dayIndex}_start`];
+                        employees[empIndex][`day${dayIndex}_end`] = calculateEndTime(startTime, totalMinutes, employees[empIndex].stundenSoll);
+                        renderSchedule();
+                        menu.remove();
+                        currentGearMenu = null;
+                    });
+                    menu.appendChild(option);
+                }
+            }
+
+            menu.style.position = 'fixed';
+            menu.style.left = event.clientX + 'px';
+            menu.style.top = event.clientY + 'px';
+            document.body.appendChild(menu);
+            currentGearMenu = menu;
+
+            setTimeout(() => {
+                document.addEventListener('click', function closeMenu() {
+                    if (currentGearMenu) {
+                        currentGearMenu.remove();
+                        currentGearMenu = null;
+                    }
+                    document.removeEventListener('click', closeMenu);
+                }, 10);
+            });
+        }
+
+        // ==========================================
+        // 6. MAIN RENDER ENGINE
+        // ==========================================
+        function renderSchedule() {
+            const dateRange = getWeekDateRange(currentWeek);
+            const headerTitle = document.querySelector('header h1');
+            if (headerTitle) headerTitle.textContent = `Dienstplan ${currentWeek} / ${dateRange}`;
+
+            const tbody = document.getElementById('scheduleBody');
+            tbody.innerHTML = '';
+
+            employees.forEach((emp, index) => {
+                const row = document.createElement('tr');
+
+                const nameCell = document.createElement('td');
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.className = 'name-input';
+                nameInput.value = emp.name || '';
+                if (emp.gruppe) {
+                    const gruppeClass = getGruppeColorClass(emp.gruppe);
+                    if (gruppeClass) nameInput.classList.add(gruppeClass);
+                }
+                nameInput.addEventListener('change', () => { emp.name = nameInput.value; });
+                nameCell.appendChild(nameInput);
+                row.appendChild(nameCell);
+
+                const funktionCell = document.createElement('td');
+                funktionCell.appendChild(createFunktionSelect(emp.funktion || 'FK', index));
+                row.appendChild(funktionCell);
+
+                row.appendChild(Object.assign(document.createElement('td'), { innerHTML: '' })).appendChild(createGruppeSelect(emp.gruppe || '', index));
+                row.appendChild(Object.assign(document.createElement('td'), { innerHTML: '' })).appendChild(createStundenSollSelect(emp.stundenSoll || '', index));
+                row.appendChild(Object.assign(document.createElement('td'), { innerHTML: '' })).appendChild(createDiensteSelect(emp.dienste || 'f', index));
+
+                const vbCell = document.createElement('td');
+                vbCell.style.textAlign = 'center';
+                vbCell.appendChild(createVBCheckbox(emp.vbEligible, index));
+                row.appendChild(vbCell);
+
+                for (let day = 0; day < 5; day++) {
+                    const dayCell = document.createElement('td');
+                    dayCell.className = 'day-cell';
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'time-inputs-wrapper';
+
+                    const startSelect = createTimeSelect(emp[`day${day}_start`], () => {
+                        emp[`day${day}_start`] = startSelect.value;
+                        emp[`day${day}_end`] = calculateEndTime(startSelect.value, emp[`day${day}_duration`], emp.stundenSoll);
+                        renderSchedule();
+                    });
+
+                    const endInput = document.createElement('input');
+                    endInput.type = 'text';
+                    endInput.className = 'time-cell';
+                    endInput.value = emp[`day${day}_end`];
+                    endInput.addEventListener('change', () => { emp[`day${day}_end`] = endInput.value; renderSchedule(); });
+
+                    const startColorClass = getTimeColorClass(emp[`day${day}_start`]);
+                    if (startColorClass && startColorClass !== 'time-1700') startSelect.classList.add(startColorClass);
+                    if (emp[`day${day}_end`].trim() === settings.s_time) endInput.classList.add('time-1700');
+                    if (emp.dienste === '0 - n.a.' || emp[`day${day}_start`] === '0 - n.a.') startSelect.classList.add('dienste-na');
+                    if (emp.dienste === '0 - n.a.' || emp[`day${day}_end`] === '0 - n.a.') endInput.classList.add('dienste-na');
+
+                    wrapper.appendChild(startSelect);
+                    wrapper.appendChild(createGearIcon(index, day));
+                    wrapper.appendChild(endInput);
+                    const copyArrow = createCopyArrow(index, day);
+                    if (copyArrow) wrapper.appendChild(copyArrow);
+
+                    dayCell.appendChild(wrapper);
+                    row.appendChild(dayCell);
+                }
+
+                const totalCell = document.createElement('td');
+                totalCell.className = 'total-cell';
+                totalCell.textContent = calculateTotalHours(emp) + 'h';
+                row.appendChild(totalCell);
+
+                const actionCell = document.createElement('td');
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '−';
+                deleteBtn.onclick = () => deleteEmployee(index);
+                actionCell.appendChild(deleteBtn);
+                row.appendChild(actionCell);
+
+                tbody.appendChild(row);
+            });
+
+            addCountRows();
+            renderConflicts();
+            updateKWSelector();
+            highlightVBCells();
+        }
+
+        function addCountRows() {
+            const tbody = document.getElementById('scheduleBody');
+            const counts = countShifts();
+            const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+            if (settings.show_anwesend) {
+                const dailyCountRow = document.createElement('tr');
+                dailyCountRow.className = 'count-row-wrapper';
+                dailyCountRow.innerHTML = '<td colspan="6" class="day-count" style="text-align: right; padding-left: 15px;"><strong>Anwesend (ohne Leitung & VB)</strong></td>';
+                for (let i = 0; i < 5; i++) {
+                    let count = 0;
+                    employees.forEach(emp => {
+                        const start = emp[`day${i}_start`];
+                        if (emp.gruppe !== settings.leitung && start !== '0 - n.a.' && !start.includes('VB') && emp.dienste !== '0 - n.a.') count++;
+                    });
+                    dailyCountRow.innerHTML += `<td class="day-count"><div class="count-item">${count}</div></td>`;
+                }
+                dailyCountRow.innerHTML += '<td colspan="2"></td>';
+                tbody.appendChild(dailyCountRow);
+            }
+
+            if (settings.show_frueh) {
+                const fruehRow = document.createElement('tr');
+                fruehRow.className = 'count-row-wrapper';
+                fruehRow.innerHTML = `<td colspan="6" class="day-count" style="text-align: right; padding-left: 15px;"><strong>Früh (${settings.f_time})</strong></td>`;
+                for (let i = 0; i < 5; i++) {
+                    const count = counts[dayNames[i]].frueh;
+                    const className = count < 2 ? 'count-item warning' : 'count-item';
+                    fruehRow.innerHTML += `<td class="day-count"><div class="${className}">${count}</div></td>`;
+                }
+                fruehRow.innerHTML += '<td colspan="2"></td>';
+                tbody.appendChild(fruehRow);
+            }
+
+            if (settings.show_16) {
+                const at16Row = document.createElement('tr');
+                at16Row.className = 'count-row-wrapper';
+                at16Row.innerHTML = `<td colspan="6" class="day-count" style="text-align: right; padding-left: 15px;"><strong>Um ${settings.check_time} Uhr</strong></td>`;
+                for (let i = 0; i < 5; i++) {
+                    const count = counts[dayNames[i]].at16;
+                    at16Row.innerHTML += `<td class="day-count"><div class="count-item">${count}</div></td>`;
+                }
+                at16Row.innerHTML += '<td colspan="2"></td>';
+                tbody.appendChild(at16Row);
+            }
+
+            if (settings.show_spaet) {
+                const spaetRow = document.createElement('tr');
+                spaetRow.className = 'count-row-wrapper';
+                spaetRow.innerHTML = `<td colspan="6" class="day-count" style="text-align: right; padding-left: 15px;"><strong>Spät (bis ${settings.s_time} Uhr)</strong></td>`;
+                for (let i = 0; i < 5; i++) {
+                    const count = counts[dayNames[i]].spaet;
+                    const className = count < 2 ? 'count-item warning' : 'count-item';
+                    spaetRow.innerHTML += `<td class="day-count"><div class="${className}">${count}</div></td>`;
+                }
+                spaetRow.innerHTML += '<td colspan="2"></td>';
+                tbody.appendChild(spaetRow);
+            }
+        }
+
+        // ==========================================
+        // 7. DATA MANAGEMENT
+        // ==========================================
+        function addEmployee() {
+            const newEmployee = {
+                id: Date.now(), name: '', funktion: 'FK', gruppe: '', dienste: '0', stundenSoll: '', vbEligible: false
+            };
+            for (let i = 0; i < 5; i++) {
+                newEmployee[`day${i}_start`] = '0 - n.a.';
+                newEmployee[`day${i}_end`] = '0 - n.a.';
+                newEmployee[`day${i}_duration`] = null;
+            }
+            employees.push(newEmployee);
+            renderSchedule();
+            showNotification('Mitarbeiter hinzugefügt');
+        }
+
+        function deleteEmployee(index) {
+            if (confirm('Möchten Sie diesen Mitarbeiter wirklich löschen?')) {
+                employees.splice(index, 1);
+                renderSchedule();
+                showNotification('Mitarbeiter gelöscht');
+            }
+        }
+
+        function saveCurrentWeekData() {
+            allWeeks[currentWeek] = {
+                employees: JSON.parse(JSON.stringify(employees)),
+                einrichtungsname: einrichtungsname,
+                aktuelles: (currentNotes && currentNotes.textContent !== PLACEHOLDER_TEXT) ? currentNotes.textContent : ''
+            };
+        }
+
+        function loadWeekData(weekKey) {
+            const data = allWeeks[weekKey];
+            if (data) {
+                employees = JSON.parse(JSON.stringify(data.employees || []));
+                einrichtungsname = data.einrichtungsname || '';
+                document.getElementById('einrichtungInput').value = einrichtungsname;
+                if (data.aktuelles && data.aktuelles !== '') {
+                    currentNotes.textContent = data.aktuelles;
+                    currentNotes.style.color = 'inherit';
+                } else {
+                    currentNotes.textContent = PLACEHOLDER_TEXT;
+                    currentNotes.style.color = '#c5c5c5';
+                }
+            } else {
+                employees = [];
+                // Automatically spawn 5 empty rows for a brand new week to prevent the grid from vanishing
+                for(let i=0; i<5; i++){
+                    const newEmp = {
+                        id: Date.now() + Math.random(), name: '', funktion: 'FK', gruppe: '', dienste: '0', stundenSoll: '', vbEligible: false
+                    };
+                    for (let d = 0; d < 5; d++) {
+                        newEmp[`day${d}_start`] = '0 - n.a.';
+                        newEmp[`day${d}_end`] = '0 - n.a.';
+                        newEmp[`day${d}_duration`] = null;
+                    }
+                    employees.push(newEmp);
+                }
+                einrichtungsname = '';
+                document.getElementById('einrichtungInput').value = '';
+                currentNotes.textContent = PLACEHOLDER_TEXT;
+                currentNotes.style.color = '#c5c5c5';
+            }
+
+            updateAktuellesVisibility();
+        }
+
+        function saveAsHTML() {
+            saveCurrentWeekData();
+            const inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(i => i.setAttribute('value', i.value));
+            const data = { allWeeks, employees, currentWeek, einrichtungsname, settings, ignoredConflicts: Array.from(ignoredConflicts) };
+            document.getElementById('projectDataStorage').setAttribute('value', JSON.stringify(data));
+            const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `dienstplan_PROJEKT_${currentWeek.replace(/\s+/g, '_')}.html`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showNotification('✅ Das Ganze ist jetzt exportiert!');
+        }
+
+        function saveThisWeek() {
+            saveCurrentWeekData();
+            const inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(i => i.setAttribute('value', i.value));
+            const singleWeekData = {};
+            singleWeekData[currentWeek] = allWeeks[currentWeek];
+            const data = {
+                allWeeks: singleWeekData, employees, currentWeek, einrichtungsname, settings, ignoredConflicts: Array.from(ignoredConflicts)
+            };
+            document.getElementById('projectDataStorage').setAttribute('value', JSON.stringify(data));
+            const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `dienstplan_${currentWeek.replace(/\s+/g, '_')}.html`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+            showNotification('✅ Diese Woche gespeichert');
+        }
+
+        function printSchedule() { window.print(); }
+
+        function addNewWeek() {
+            if (!confirm('Möchten Sie wirklich eine neue Woche anlegen?')) return;
+
+            saveCurrentWeekData();
+
+            const parsed = parseWeekNumber(currentWeek);
+            const newWeekKey = formatWeekNumber(parsed.week >= 52 ? 1 : parsed.week + 1, parsed.week >= 52 ? parsed.year + 1 : parsed.year);
+
+            const applyRotation = confirm('Möchten Sie das Rotationssystem anwenden?\n\n[OK] = Dienste rotieren (f -> m -> s)\n[Abbrechen] = Die aktuelle Woche exakt 1:1 kopieren');
+
+            const newEmployees = employees.map(emp => {
+                const newEmp = JSON.parse(JSON.stringify(emp));
+                newEmp.id = Date.now() + Math.random();
+                newEmp.funktion = emp.funktion || 'FK';
+
+                if (applyRotation && emp.dienste !== '0') {
+                    newEmp.dienste = rotateDienste(emp.dienste);
+
+                    for (let i = 0; i < 5; i++) {
+                        newEmp[`day${i}_start`] = '0 - n.a.';
+                        newEmp[`day${i}_end`] = '0 - n.a.';
+                        newEmp[`day${i}_duration`] = null;
+                    }
+                }
+
+                return newEmp;
+            });
+
+            allWeeks[newWeekKey] = {
+                employees: newEmployees,
+                einrichtungsname: einrichtungsname
+            };
+
+            currentWeek = newWeekKey;
+            document.getElementById('weekInput').value = currentWeek;
+            employees = newEmployees;
+
+            if (applyRotation && confirm('Sollen die Dienste auf Grundlage der neuen Rotation angepasst werden?')) {
+                employees.forEach((emp, index) => {
+                    if (emp.dienste !== '0') applyDiensteToSchedule(index, emp.dienste);
+                });
+            }
+
+            renderSchedule();
+            showNotification(`✨ Neue Woche erstellt: ${newWeekKey}`);
+        }
+
+        function updateKWSelector() {
+            const kwSelect = document.getElementById('kwSelect');
+            kwSelect.innerHTML = '';
+            const availableWeeks = Object.keys(allWeeks).sort();
+            if (!availableWeeks.includes(currentWeek)) {
+                availableWeeks.push(currentWeek);
+                availableWeeks.sort();
+            }
+            availableWeeks.forEach(week => {
+                const option = document.createElement('option');
+                option.value = week; option.textContent = week;
+                if (week === currentWeek) option.selected = true;
+                kwSelect.appendChild(option);
+            });
+        }
+
+        document.getElementById('kwSelect').addEventListener('change', (e) => {
+            saveCurrentWeekData();
+            currentWeek = e.target.value;
+            document.getElementById('weekInput').value = currentWeek;
+            loadWeekData(currentWeek);
+            renderSchedule();
+        });
+
+        document.getElementById('weekInput').addEventListener('change', (e) => {
+            saveCurrentWeekData();
+            currentWeek = e.target.value || getNextWeekString();
+            loadWeekData(currentWeek);
+            renderSchedule();
+        });
+
+        document.getElementById('einrichtungInput').addEventListener('change', (e) => {
+            einrichtungsname = e.target.value;
+        });
+
+        // ==========================================
+        // 8. SETTINGS MANAGEMENT
+        // ==========================================
+        function openSettings() {
+            document.getElementById('setting_f_time').value = settings.f_time;
+            document.getElementById('setting_m_time').value = settings.m_time;
+            document.getElementById('setting_s_time').value = settings.s_time;
+            document.getElementById('setting_h_time').value = settings.h_time;
+            document.getElementById('setting_check_time').value = settings.check_time || '16:00';
+            document.getElementById('setting_vb_duration').value = settings.vb_duration || 120;
+
+            const groups = ['gruppe1', 'gruppe2', 'gruppe3', 'gruppe4', 'gruppe5', 'hilfspersonal', 'leitung'];
+            groups.forEach(g => {
+                const txt = document.getElementById('setting_' + g);
+                if (txt) txt.value = settings[g];
+
+                const col = document.getElementById('setting_color_' + g);
+                if (col && settings['color_' + g]) {
+                    col.value = settings['color_' + g];
+                    col.style.backgroundColor = settings['color_' + g];
+                }
+            });
+
+            document.getElementById('setting_show_anwesend').checked = settings.show_anwesend;
+            document.getElementById('setting_show_frueh').checked = settings.show_frueh;
+            document.getElementById('setting_show_16').checked = settings.show_16;
+            document.getElementById('setting_show_spaet').checked = settings.show_spaet;
+
+            document.getElementById('settingsModal').classList.add('show');
+        }
+
+        function closeSettings() { document.getElementById('settingsModal').classList.remove('show'); }
+
+        function saveSettings() {
+            settings.f_time = document.getElementById('setting_f_time').value;
+            settings.m_time = document.getElementById('setting_m_time').value;
+            settings.s_time = document.getElementById('setting_s_time').value;
+            settings.h_time = document.getElementById('setting_h_time').value;
+            settings.check_time = document.getElementById('setting_check_time').value;
+            settings.vb_duration = parseInt(document.getElementById('setting_vb_duration').value, 10) || 120;
+
+            const groups = ['gruppe1', 'gruppe2', 'gruppe3', 'gruppe4', 'gruppe5', 'hilfspersonal', 'leitung'];
+            groups.forEach((g, idx) => {
+                settings[g] = document.getElementById('setting_' + g).value;
+                settings['color_' + g] = document.getElementById('setting_color_' + g).value;
+                gruppeOptions[idx] = settings[g];
+            });
+
+            settings.show_anwesend = document.getElementById('setting_show_anwesend').checked;
+            settings.show_frueh = document.getElementById('setting_show_frueh').checked;
+            settings.show_16 = document.getElementById('setting_show_16').checked;
+            settings.show_spaet = document.getElementById('setting_show_spaet').checked;
+
+            applyGroupColors();
+            closeSettings();
+            renderSchedule();
+            showNotification('✅ Einstellungen gespeichert');
+        }
+
+        function showNotification(message, isError = false) {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.textContent = message;
+                notification.className = 'notification' + (isError ? ' error' : '');
+                notification.classList.add('show');
+                setTimeout(() => { notification.classList.remove('show'); }, 5000);
+            }, 10);
+        }
+
+        // ==========================================
+        // 9. IMPORT / EXPORT
+        // ==========================================
+        function exportSingleWeek() {
+            saveCurrentWeekData();
+            const weekData = allWeeks[currentWeek];
+            if (!weekData) { showNotification("Keine Daten zum Exportieren gefunden!", true); return; }
+            const exportBundle = { weekData: weekData, settings: settings };
+            const dataStr = JSON.stringify(exportBundle, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Dienstplan_und_Einstellungen_für_${currentWeek.replace(/\s+/g, '_')}.json`;
+            a.click();
+            showNotification(`✅ ${currentWeek} inkl. Einstellungen exportiert!`);
+        }
+
+        function triggerImport() { document.getElementById('importFile').click(); }
+        function importSingleWeek(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                try {
+                    const importedBundle = JSON.parse(e.target.result);
+
+                    // 1. SCHEMA MIGRATION: Determine the structure of the imported JSON
+                    let dataToImport;
+
+                    if (Array.isArray(importedBundle)) {
+                        // V1 Legacy: JSON is just a raw array of employees
+                        dataToImport = { employees: importedBundle, einrichtungsname: '', notes: '', aktuelles: '' };
+                    } else if (importedBundle.weekData) {
+                        // Modern Version: JSON contains weekData wrapper and settings
+                        dataToImport = importedBundle.weekData;
+                    } else {
+                        // Intermediate Version: JSON is an object but lacks the wrapper
+                        dataToImport = importedBundle;
+                    }
+
+                    if (confirm(`Daten in ${currentWeek} importieren? Aktuelle Daten werden überschrieben.`)) {
+
+                        // 2. DATA SANITIZATION: Inject modern defaults into legacy employee objects
+                        if (dataToImport.employees && Array.isArray(dataToImport.employees)) {
+                            dataToImport.employees.forEach(emp => {
+                                if (!emp.id) emp.id = Date.now() + Math.random();
+                                if (!emp.funktion) emp.funktion = 'FK';
+                                if (!emp.gruppe) emp.gruppe = '';
+                                if (!emp.dienste) emp.dienste = '0';
+                                if (!emp.stundenSoll) emp.stundenSoll = '';
+                                if (emp.vbEligible === undefined) emp.vbEligible = false;
+
+                                // Ensure all 5 days exist to prevent rendering null-reference errors
+                                for (let i = 0; i < 5; i++) {
+                                    if (!emp[`day${i}_start`]) emp[`day${i}_start`] = '0 - n.a.';
+                                    if (!emp[`day${i}_end`]) emp[`day${i}_end`] = '0 - n.a.';
+                                    if (emp[`day${i}_duration`] === undefined) emp[`day${i}_duration`] = null;
+                                }
+                            });
+                        }
+
+                        allWeeks[currentWeek] = dataToImport;
+
+                        // 3. SETTINGS MIGRATION
+                        if (importedBundle.settings) {
+                            Object.keys(importedBundle.settings).forEach(key => { settings[key] = importedBundle.settings[key]; });
+
+                            // Ensure new timeline markers don't collapse if missing from old settings
+                            if (settings.marker_start === undefined) settings.marker_start = 435;
+                            if (settings.marker_end === undefined) settings.marker_end = 1020;
+                            if (settings.marker_mid1 === 540 || settings.marker_mid1 === undefined) settings.marker_mid1 = 930;
+                            if (settings.marker_mid2 === 720 || settings.marker_mid2 === undefined) settings.marker_mid2 = 990;
+
+                            const groups = ['gruppe1', 'gruppe2', 'gruppe3', 'gruppe4', 'gruppe5', 'hilfspersonal', 'leitung'];
+                            groups.forEach((g, idx) => {
+                                if (!settings[g]) settings[g] = `Gruppe ${idx + 1}`; // Fallback for missing group names
+                                gruppeOptions[idx] = settings[g];
+                            });
+
+                            applyGroupColors();
+                            if (typeof initMarkers === 'function') initMarkers();
+
+                            showNotification("✅ Woche und Einstellungen importiert!");
+                        } else {
+                            showNotification("✅ Woche importiert (Altes Format, Standard-Einstellungen verwendet).");
+                        }
+
+                        loadWeekData(currentWeek);
+                        renderSchedule();
+
+                        // Reset file input so the same file can be imported twice if needed
+                        document.getElementById('importFile').value = '';
+                    }
+                } catch (err) {
+                    console.error("Import Error:", err);
+                    showNotification("❌ Fehler: Ungültige oder korrupte Datei!", true);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ==========================================
+        // 10. TIMELINE MODULE
+        // ==========================================
+        const timelineContainer = document.createElement('div');
+        timelineContainer.id = 'interactiveTimeline';
+        timelineContainer.style.cssText = 'background: white; border-radius: 16px; padding: 2rem; margin-top: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08);';
+
+        timelineContainer.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 1.5rem; gap: 15px;">
+                <h2 style="font-family: 'Times New Roman', serif; font-style: italic; font-size: 2rem; color: var(--primary); margin: 0;">Interaktive Tagesansicht</h2>
+                <select id="timelineDaySelect" style="width: 200px; border: 2px solid var(--accent); padding: 8px; border-radius: 8px; font-weight: 600;">
+                    <option value="0">Montag</option>
+                    <option value="1">Dienstag</option>
+                    <option value="2">Mittwoch</option>
+                    <option value="3">Donnerstag</option>
+                    <option value="4">Freitag</option>
+                </select>
+            </div>
+            <div id="timelineVisualArea" style="position: relative; background: #f8f9fa; border: 1px solid var(--border); border-radius: 8px; min-height: 400px; padding-top: 10px; overflow-x: auto;">
+                <div id="timelineScale" style="display: flex; border-bottom: 1px solid #ddd; margin-bottom: 10px; position: sticky; top: 0; background: #f8f9fa; z-index: 5; height: 30px;"></div>
+
+                <div id="startMarker" class="timeline-marker main-marker"></div>
+                <div id="endMarker" class="timeline-marker main-marker"></div>
+                <div id="midMarker1" class="timeline-marker sub-marker"></div>
+                <div id="midMarker2" class="timeline-marker sub-marker"></div>
+
+                <div id="timelineBars" style="position: relative; width: 1400px; height: 100%;"></div>
+            </div>
+        `;
+
+        document.querySelector('.container').appendChild(timelineContainer);
+
+        const PX_PER_MIN = 2.0;
+        const TIMELINE_START = 6 * 60 + 15;
+        const TIMELINE_END = 18 * 60;
+        const CORE_START = 7 * 60 + 15;
+        const CORE_END = 17 * 60;
+
+        function buildScale() {
+            const scale = document.getElementById('timelineScale');
+            scale.innerHTML = '';
+            for (let m = TIMELINE_START; m <= TIMELINE_END; m += 15) {
+                const div = document.createElement('div');
+                const isHour = m % 60 === 0;
+                div.style.cssText = `
+                    width: ${15 * PX_PER_MIN}px;
+                    border-left: 1px solid ${isHour ? '#999' : '#ddd'};
+                    font-size: 0.65rem;
+                    padding-left: 2px;
+                    color: ${isHour ? '#333' : '#aaa'};
+                    flex-shrink: 0;
+                `;
+                if (m % 30 === 0) div.textContent = formatTime(m);
+                scale.appendChild(div);
+            }
+        }
+
+        function updateMarkerPosition(id, settingKey) {
+            const marker = document.getElementById(id);
+            if (marker && settings[settingKey] !== undefined) {
+                marker.style.left = `${(settings[settingKey] - TIMELINE_START) * PX_PER_MIN}px`;
+            }
+        }
+
+        function initMarkers() {
+            const markerMap = {
+                'startMarker': 'marker_start',
+                'endMarker': 'marker_end',
+                'midMarker1': 'marker_mid1',
+                'midMarker2': 'marker_mid2'
+            };
+
+            Object.keys(markerMap).forEach(id => {
+                const settingKey = markerMap[id];
+                const marker = document.getElementById(id);
+
+                updateMarkerPosition(id, settingKey);
+
+                marker.onmousedown = (e) => {
+                    e.preventDefault();
+                    let startX = e.clientX;
+                    const originalMin = settings[settingKey];
+
+                    document.onmousemove = (moveE) => {
+                        const deltaX = moveE.clientX - startX;
+                        const deltaMin = Math.round(deltaX / PX_PER_MIN / 15) * 15;
+                        let newMin = originalMin + deltaMin;
+
+                        newMin = Math.max(TIMELINE_START, Math.min(newMin, TIMELINE_END));
+
+                        settings[settingKey] = newMin;
+                        updateMarkerPosition(id, settingKey);
+                    };
+
+                    document.onmouseup = () => {
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                    };
+                };
+            });
+        }
+
+
+        function calculateShiftWindows(startStr, endStr) {
+            const rawStartMins = parseTime(startStr);
+            const rawEndMins = parseTime(endStr);
+
+            if (rawStartMins === null || rawEndMins === null) {
+                return { isValid: false };
+            }
+
+            let anwesenheitStart = rawStartMins;
+            let anwesenheitEnd = rawEndMins;
+            let vbStart = null;
+            let vbEnd = null;
+            let vbType = null;
+
+            // RegEx: Matches "VB", ignores spaces, captures optional digits
+            const startMatch = startStr.match(/VB\s*(\d+)?/i);
+            const endMatch = endStr.match(/VB\s*(\d+)?/i);
+
+            if (startMatch) {
+                // Priority 1: Inline digits (e.g. "VB90"). Priority 2: Global Settings. Priority 3: Hard fallback to 120.
+                const dynamicDuration = startMatch[1] ? parseInt(startMatch[1], 10) : (settings.vb_duration || 120);
+
+                vbStart = rawStartMins;
+                vbEnd = rawStartMins + dynamicDuration;
+                anwesenheitStart = vbEnd;
+                vbType = 'morning';
+            } else if (endMatch) {
+                const dynamicDuration = endMatch[1] ? parseInt(endMatch[1], 10) : (settings.vb_duration || 120);
+
+                vbEnd = rawEndMins;
+                vbStart = rawEndMins - dynamicDuration;
+                anwesenheitEnd = vbStart;
+                vbType = 'afternoon';
+            }
+
+            return {
+                isValid: true,
+                anwesenheitStart: anwesenheitStart,
+                anwesenheitEnd: anwesenheitEnd,
+                vbStart: vbStart,
+                vbEnd: vbEnd,
+                vbType: vbType
+            };
+        }
+
+
+        function renderTimeline() {
+            const dayIdx = document.getElementById('timelineDaySelect').value;
+            const container = document.getElementById('timelineBars');
+            container.innerHTML = '';
+
+            employees.forEach((emp, empIdx) => {
+                const startStr = emp[`day${dayIdx}_start`] || '';
+                const endStr = emp[`day${dayIdx}_end`] || '';
+
+                const isNA = !startStr || startStr === '0' || startStr === '0 - n.a.';
+
+                let aStart, aEnd, vStart, vEnd, vType;
+
+                if (isNA) {
+                    aStart = CORE_START;
+                    aEnd = CORE_END;
+                } else {
+                    const windows = calculateShiftWindows(startStr, endStr);
+                    if (!windows.isValid) {
+                        aStart = CORE_START; aEnd = CORE_END;
+                    } else {
+                        aStart = windows.anwesenheitStart;
+                        aEnd = windows.anwesenheitEnd;
+                        vStart = windows.vbStart;
+                        vEnd = windows.vbEnd;
+                        vType = windows.vbType;
+                    }
+                }
+
+                const empName = emp.name || `MA ${empIdx + 1}`;
+                const displayName = emp.funktion ? `${empName} - ${emp.funktion}` : empName;
+                const colorClass = getGruppeColorClass(emp.gruppe);
+
+                let barOpacity = 1.0;
+                if (emp.funktion === 'PiA 3. Jahr' || emp.funktion === 'PiA 2. Jahr') barOpacity = 0.75;
+                else if (emp.funktion === 'PiA 1. Jahr' || emp.funktion === 'EK') barOpacity = 0.5;
+                else if (emp.funktion === 'Andere') barOpacity = 0.3;
+
+                // Nested helper to generate modular bars
+                function createBar(startMin, endMin, isVB, isNA) {
+                    const bar = document.createElement('div');
+                    const leftPos = (startMin - TIMELINE_START) * PX_PER_MIN;
+                    const barWidth = (endMin - startMin) * PX_PER_MIN;
+
+                    bar.style.cssText = `
+                        height: 35px; margin: 5px 0; border-radius: 6px; position: absolute;
+                        left: ${leftPos}px; width: ${Math.max(30, barWidth)}px; top: ${empIdx * 45}px;
+                        display: flex; align-items: center; justify-content: center;
+                        font-size: 0.85rem; font-weight: 600; cursor: move; user-select: none;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.1); white-space: nowrap; overflow: hidden;
+                        text-overflow: ellipsis; padding: 0 8px; z-index: 3;
+                        opacity: ${isNA ? 0.4 : barOpacity};
+                    `;
+
+                    if (isNA) {
+                        bar.style.background = 'var(--na-grey)';
+                        bar.style.color = '#888';
+                        bar.style.border = '2px dashed #ccc';
+                    } else if (isVB) {
+                        bar.style.background = '#e0e0e0';
+                        bar.style.color = '#555';
+                        bar.style.backdropFilter = 'blur(4px)';
+                        bar.style.border = '2px dashed #999';
+                    } else {
+                        if (colorClass) bar.classList.add(colorClass);
+                    }
+
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = isVB ? 'VB' : displayName;
+                    textSpan.style.pointerEvents = 'none';
+                    textSpan.style.overflow = 'hidden';
+                    textSpan.style.textOverflow = 'ellipsis';
+                    bar.appendChild(textSpan);
+
+                    if (!isNA) {
+                        const removeBtn = document.createElement('span');
+                        removeBtn.innerHTML = '&#8722;';
+                        removeBtn.style.cssText = `
+                            cursor: pointer; font-size: 1.2rem; font-weight: bold; padding-left: 8px;
+                            color: rgba(0,0,0,0.5); transition: color 0.2s; pointer-events: auto;
+                        `;
+                        removeBtn.onmouseenter = () => removeBtn.style.color = 'red';
+                        removeBtn.onmouseleave = () => removeBtn.style.color = 'rgba(0,0,0,0.5)';
+
+                        removeBtn.onmousedown = (e) => {
+                            e.stopPropagation();
+                            if (isVB) {
+                                // Strip the VB flag but keep the time
+                                if (vType === 'morning') emp[`day${dayIdx}_start`] = emp[`day${dayIdx}_start`].replace(/vb/i, '').trim();
+                                if (vType === 'afternoon') emp[`day${dayIdx}_end`] = emp[`day${dayIdx}_end`].replace(/vb/i, '').trim();
+                            } else {
+                                // Delete the entire shift
+                                emp[`day${dayIdx}_start`] = '0 - n.a.';
+                                emp[`day${dayIdx}_end`] = '0 - n.a.';
+                            }
+                            renderSchedule();
+                        };
+                        bar.appendChild(removeBtn);
+
+                        // Drag Logic applied strictly to Anwesenheit Bar
+                        if (!isVB) {
+                            bar.onmousedown = (e) => {
+                                let startX = e.clientX;
+                                const originalStartMin = aStart;
+                                const totalDuration = aEnd - aStart;
+
+                                document.onmousemove = (moveE) => {
+                                    const deltaX = moveE.clientX - startX;
+                                    const deltaMin = Math.round(deltaX / PX_PER_MIN / 15) * 15;
+                                    let newStart = originalStartMin + deltaMin;
+                                    newStart = Math.max(TIMELINE_START, Math.min(newStart, TIMELINE_END - totalDuration));
+
+                                    if (vType === 'morning') {
+                                        emp[`day${dayIdx}_start`] = formatTime(newStart - 120) + ' VB';
+                                        emp[`day${dayIdx}_end`] = formatTime(newStart + totalDuration);
+                                    } else if (vType === 'afternoon') {
+                                        emp[`day${dayIdx}_start`] = formatTime(newStart);
+                                        emp[`day${dayIdx}_end`] = formatTime(newStart + totalDuration + 120) + ' VB';
+                                    } else {
+                                        emp[`day${dayIdx}_start`] = formatTime(newStart);
+                                        emp[`day${dayIdx}_end`] = formatTime(newStart + totalDuration);
+                                    }
+                                    renderSchedule();
+                                };
+
+                                document.onmouseup = () => {
+                                    document.onmousemove = null;
+                                    document.onmouseup = null;
+                                };
+                            };
+                        }
+                    }
+                    container.appendChild(bar);
+                }
+
+                if (isNA) {
+                    createBar(aStart, aEnd, false, true);
+                } else {
+                    if (vType === 'morning') {
+                        createBar(vStart, vEnd, true, false);
+                        createBar(aStart, aEnd, false, false);
+                    } else if (vType === 'afternoon') {
+                        createBar(aStart, aEnd, false, false);
+                        createBar(vStart, vEnd, true, false);
+                    } else {
+                        createBar(aStart, aEnd, false, false);
+                    }
+                }
+            });
+            container.style.height = `${employees.length * 45}px`;
+        }
+
+        document.getElementById('timelineDaySelect').onchange = renderTimeline;
+
+        const originalRenderSchedule = renderSchedule;
+        renderSchedule = function() {
+            originalRenderSchedule();
+            renderTimeline();
+        };
+
+        // ==========================================
+        // 11. INITIALIZATION
+        // ==========================================
+
+        (function init() {
+            const storage = document.getElementById('projectDataStorage').getAttribute('value');
+            if (storage) {
+                const data = JSON.parse(storage);
+                allWeeks = data.allWeeks || {};
+                employees = data.employees || [];
+                currentWeek = data.currentWeek || getNextWeekString();
+                einrichtungsname = data.einrichtungsname || '';
+                settings = data.settings || settings;
+                ignoredConflicts = new Set(data.ignoredConflicts || []);
+
+                if (settings.marker_start === undefined) settings.marker_start = 435;
+                if (settings.marker_end === undefined) settings.marker_end = 1020;
+                if (settings.marker_mid1 === 540 || settings.marker_mid1 === undefined) settings.marker_mid1 = 930;
+                if (settings.marker_mid2 === 720 || settings.marker_mid2 === undefined) settings.marker_mid2 = 990;
+
+                document.getElementById('weekInput').value = currentWeek;
+                document.getElementById('einrichtungInput').value = einrichtungsname;
+            } else {
+                if (employees.length === 0) {
+                    for (let i = 0; i < 5; i++) addEmployee();
+                }
+            }
+
+            const savedWeekData = allWeeks[currentWeek];
+            if (savedWeekData && savedWeekData.aktuelles) {
+                currentNotes.textContent = savedWeekData.aktuelles;
+                currentNotes.style.color = 'inherit';
+            } else {
+                currentNotes.textContent = PLACEHOLDER_TEXT;
+                currentNotes.style.color = '#c5c5c5';
+            }
+            updateAktuellesVisibility();
+
+            applyGroupColors();
+            buildScale();
+            initMarkers();
+            renderSchedule();
+        })();
+
+        // ==========================================
+        // 12. HOVER INSTRUCTION SYSTEM
+        // ==========================================
+        const helpTooltip = document.createElement('div');
+        helpTooltip.className = 'help-tooltip';
+        document.body.appendChild(helpTooltip);
+
+        document.addEventListener('mouseover', (e) => {
+            // .closest() ensures it works even if hovering over an icon/text inside a button
+            const targetElement = e.target.closest('[data-hover-instructions]');
+            if (targetElement) {
+                helpTooltip.textContent = targetElement.getAttribute('data-hover-instructions');
+                helpTooltip.classList.add('visible');
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (helpTooltip.classList.contains('visible')) {
+                // Offset the tooltip 15px down and to the right of the cursor
+                helpTooltip.style.left = (e.pageX + 15) + 'px';
+                helpTooltip.style.top = (e.pageY + 15) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const targetElement = e.target.closest('[data-hover-instructions]');
+            if (targetElement) {
+                helpTooltip.classList.remove('visible');
+            }
+        });
+
+
+
+    </script>
+</body>
+</html>

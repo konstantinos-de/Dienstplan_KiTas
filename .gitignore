@@ -1,0 +1,15 @@
+# Ignore specific files
+secrets.json
+config.log
+.directory
+logo_icon.png
+Dienstplan_Archiv/
+*.json
+
+
+# Ignore entire folders
+node_modules/
+temp/
+
+# Ignore all files ending in .env
+*.env
