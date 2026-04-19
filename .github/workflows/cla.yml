@@ -5,7 +5,7 @@
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: 'signatures/cla.json'
-          path-to-document: 'https://gist.github.com/Konstantinos-1234/5bf1ec48eee1216c75169c4925389f4f'
+          path-to-document: 'https://gist.github.com/Konstantinos-de/5bf1ec48eee1216c75169c4925389f4f'
           branch: 'main'
           # Only the CLA and NOT the DCO sign-off:
           enable-dco: false
