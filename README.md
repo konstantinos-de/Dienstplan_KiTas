@@ -1,6 +1,6 @@
 # Dienstplan
 
-Digitaler Dienstplan -- Dieser Dienstplan ist eine lokale Anwendung, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
+Digitaler Dienstplan -- Dieser Dienstplan ist eine **lokale Anwendung**, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
 DU benötigst keine spezielle Software, **keine Installation** und **keine Internetverbindung**.<br>
 Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 
