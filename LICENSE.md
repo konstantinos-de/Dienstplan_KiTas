@@ -2,7 +2,7 @@
 
 Contributor: Konstantinos Dedousis - konstantinos.dedousis@etik.com
 
-Source Code: https://github.com/Konstantinos-1234/Dienstplan
+Source Code: https://github.com/Konstantinos-de/Dienstplan
 
 ## Purpose
 
