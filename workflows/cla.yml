@@ -1,0 +1,11 @@
+- name: "CLA Assistant Lite"
+        if: (github.event.comment.body == 'recheck' || github.event.action != 'labeled')
+        uses: contributor-assistant/github-action@v2.6.1 # Your updated version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path-to-signatures: 'signatures/cla.json'
+          path-to-document: 'https://gist.github.com/Konstantinos-1234/5bf1ec48eee1216c75169c4925389f4f'
+          branch: 'main'
+          # If you only want the CLA and NOT the DCO sign-off:
+          enable-dco: false
