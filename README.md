@@ -1,6 +1,5 @@
 
-
-
+<img src="assets/Screenshot_Ausdruck.png" width="40%">
 
 # Dienstplan
 
