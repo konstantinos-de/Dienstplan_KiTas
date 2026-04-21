@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/ca629639-8d85-4ba5-9659-2ce49bcafcb5
+
 # Dienstplan
 
 Digitaler Dienstplan -- Dieser Dienstplan ist eine **lokale Anwendung**, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
@@ -12,10 +16,11 @@ Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 
 ## Personal eintragen
 Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.
-<video src="https://github.com/konstantinos-de/Dienstplan_KiTas/raw/main/assets/Personal_eintragen.mp4" 
-       autoplay="true" 
-       loop="true" 
-       muted="true" 
+<video src="https://github.com/user-attachments/assets/ca629639-8d85-4ba5-9659-2ce49bcafcb5" 
+       muted 
+       autoplay 
+       loop 
+       playsinline 
        style="max-width: 100%;">
 </video>
 
