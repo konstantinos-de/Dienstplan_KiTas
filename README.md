@@ -1,3 +1,7 @@
+
+
+
+
 # Dienstplan
 
 Digitaler Dienstplan -- Dieser Dienstplan ist eine **lokale Anwendung**, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
@@ -19,7 +23,6 @@ Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Fun
        playsinline 
        style="max-width: 100%;">
 </video>
-
 ## Pfeiltaste nutzen
 Mit einem Klick auf die Pfeiltaste zwischen den Tagen überträgst Du den Dienst vom jeweiligen Vortag.
 
@@ -28,7 +31,7 @@ Dieses Symbol findest Du zwischen den Arbeitszeiten eines Tages. Nutze es, um di
 
 ## Zeitleiste 
 Im unteren Bereich findest Du eine grafische Tagesansicht. Dort kannst Du Deine Schichten visuell überprüfen und sie direkt mit der Maus anpassen.
-
+https://github.com/user-attachments/assets/97d96c70-1a9e-4bb5-b02e-1342f05641f8
 ## Einstellungen anpassen
 Über das Zahnrad-Symbol oben rechts gelangst Du zu den Einstellungen. Hier kannst Du feste Dienstzeiten, Gruppennamen und die Farben für Deine Einrichtung definieren.
 
