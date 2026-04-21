@@ -1,7 +1,3 @@
-
-
-https://github.com/user-attachments/assets/ca629639-8d85-4ba5-9659-2ce49bcafcb5
-
 # Dienstplan
 
 Digitaler Dienstplan -- Dieser Dienstplan ist eine **lokale Anwendung**, die direkt in Deinem Internetbrowser (z. B. Chrome, Edge, Firefox usw.) läuft.<br>
