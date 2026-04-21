@@ -12,7 +12,8 @@ Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 
 ## Personal eintragen
 Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.
-<video src="assets/Personal_eintragen.mp4" controls="false" autoplay="true" loop="true" muted="true" style="max-width: 100%;"> </video>
+<video src="assets/Personal_eintragen.mp4" controls="false" autoplay="true" loop="true" muted="true" style="max-width: 100%;"> 
+</video>
 
 ## Pfeiltaste nutzen
 Mit einem Klick auf die Pfeiltaste zwischen den Tagen überträgst Du den Dienst vom jeweiligen Vortag.
