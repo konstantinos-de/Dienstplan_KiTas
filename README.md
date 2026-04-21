@@ -15,7 +15,8 @@ Alle eingegebenen **Daten bleiben ausschließlich auf Deinem eigenen Computer**.
 3. Öffne die HTML-Datei mit einem einfachen Doppelklick.
 
 ## Personal eintragen
-Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.
+Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Funktionen, Gruppen und Dienstzeiten über die Drop-Down-Menüs aus.<br>
+
 <video src="https://github.com/user-attachments/assets/ca629639-8d85-4ba5-9659-2ce49bcafcb5" 
        muted 
        autoplay 
@@ -23,6 +24,7 @@ Klicke auf „Mitarbeiter hinzufügen“. Trage die Namen ein und wähle die Fun
        playsinline 
        style="max-width: 100%;">
 </video>
+<br>
 ## Pfeiltaste nutzen
 Mit einem Klick auf die Pfeiltaste zwischen den Tagen überträgst Du den Dienst vom jeweiligen Vortag.
 
@@ -30,8 +32,15 @@ Mit einem Klick auf die Pfeiltaste zwischen den Tagen überträgst Du den Dienst
 Dieses Symbol findest Du zwischen den Arbeitszeiten eines Tages. Nutze es, um die Soll-Zeiten individuell anzupassen.
 
 ## Zeitleiste 
-Im unteren Bereich findest Du eine grafische Tagesansicht. Dort kannst Du Deine Schichten visuell überprüfen und sie direkt mit der Maus anpassen.
-https://github.com/user-attachments/assets/97d96c70-1a9e-4bb5-b02e-1342f05641f8
+Im unteren Bereich findest Du eine grafische Tagesansicht. Dort kannst Du Deine Schichten visuell überprüfen und sie direkt mit der Maus anpassen.<br>
+<video src="https://github.com/user-attachments/assets/97d96c70-1a9e-4bb5-b02e-1342f05641f8"
+       muted 
+       autoplay 
+       loop 
+       playsinline 
+       style="max-width: 100%;">
+</video>
+<br>
 ## Einstellungen anpassen
 Über das Zahnrad-Symbol oben rechts gelangst Du zu den Einstellungen. Hier kannst Du feste Dienstzeiten, Gruppennamen und die Farben für Deine Einrichtung definieren.
 
